@@ -1,0 +1,29 @@
+
+.\" *** LIS macro *******************************************************
+.\"  (LIS)ting.
+.\"
+.\"  usage:
+.\"  .LIS
+.\"       (\_/)
+.\"      (='.'=)
+.\"      (")_(")
+.\"  .DE
+.\"
+.\"  this macro sets the following text as written, in a monospaced font,
+.\"  terminated by .DE
+.\"
+.nr ls 0
+.ds LISTING Listing
+.de LIS
+.nr ls +1
+.nr fl \\n[ls]
+.ds cap \\*[LISTING]
+.ie \\n[an] \{\
+.	ds lab \\*[Ch]\\n[ls]
+.\}
+.el \{\
+.	ds lab \\n[ls]
+.\}
+.DS
+.ft CW
+..

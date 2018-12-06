@@ -1,0 +1,36 @@
+
+.\" *** MAC macro *******************************************************
+.\"  (MA)ke (A)cronym.
+.\"
+.\"  usage: .MAC <shortform> "<longform>"
+.\"
+.\"  this macro defines an acronym to be referred to later by using .AC
+.\"
+.de MAC
+.ds mac:\\$1 \\$2
+.nr mad:\\$1 1
+..
+
+.\" *** AC macro ********************************************************
+.\"  (AC)ronym.
+.\"
+.\"  usage: .AC <shortform> [punctuation]
+.\"
+.\"  this macro sets an acronym in the text. if the acronym is used for
+.\"  the first time, the long form is printed with the short form in
+.\"  parentheses directly following. otherwise, only the short form is
+.\"  printed.
+.\"
+.\"  the optional second parameter allows to provide punctuation that is
+.\"  set immediately following the acronym (to avoid whitespace between
+.\"  the acronym and the punctuation)
+.\"
+.de AC
+.ie \\n[mad:\\$1]=1 \{\
+.	nr mad:\\$1 0
+\\*[mac:\\$1]\~(\\$1)\\$2
+.\}
+.el \{\
+\\$1\\$2
+.\}
+..

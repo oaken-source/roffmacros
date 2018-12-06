@@ -1,0 +1,43 @@
+
+.\" *** CAP macro *******************************************************
+.\"  (CAP)tion.
+.\"
+.\"  usage example:
+.\"  .KF
+.\"  .PSPIC some_image.eps
+.\"  .CAP
+.\"  a descriptive figure caption
+.\"  .LP
+.\"  .KE
+.\"
+.\"  this macro allows to add a caption to a float, with a matching label
+.\"  and numbering, if available (see labels.tmac)
+.\"
+.de CAP
+.sp .05i
+.in +5n
+.ti -5n
+.if !"\\n[fl]"" \{\
+.	setlab
+.	ds lab \~\\*[lab]
+.\}
+\fB\\*[cap]\\*[lab]:\fP
+..
+
+.\" *** PSPIC macro (modified) ******************************************
+.\"  This amends the PSPIC macro contained in groff's provided
+.\"  pspic.tmac, to set the correct label for a following .CAP invocation
+.\"
+.ds FIGURE Figure
+.am PSPIC
+.ds cap \\*[FIGURE]
+..
+
+.\" *** TS macro (modified) *********************************************
+.\"  This amends the TS macro contained in groff's provided s.tmac,
+.\"  to set the correct label for a following .CAP invocation
+.\"
+.ds TABLE Table
+.am @TS
+.ds cap \\*[TABLE]
+..
