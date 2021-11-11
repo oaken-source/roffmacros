@@ -1,0 +1,27 @@
+
+# example usage:
+#   create a Makefile in the document root with the contents
+#
+# cat > Makefile <<EOF
+#   DOCUMENT = main.ms
+#   include macros/Makefile.sub
+# EOF
+
+
+GROFF ?= groff
+GOPTS ?= -wmac -e -t -R -U -ms -ma -Mmacros -Kutf8
+
+DOCUMENT ?= $(wildcard *.ms)
+
+PS ?= $(patsubst %.ms, %.ps, $(DOCUMENT))
+
+.PHONY: all clean
+
+all: $(PS)
+
+clean:
+	$(RM) *.ps *.ll
+
+%.ps: %.ms
+	$(GROFF) $(GOPTS) $< > $@
+	$(GROFF) $(GOPTS) $< > $@
