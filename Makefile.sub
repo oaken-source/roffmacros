@@ -3,25 +3,30 @@
 #   create a Makefile in the document root with the contents
 #
 # cat > Makefile <<EOF
-#   DOCUMENT = main.ms
+#   DOCUMENT = main.pdf
 #   include macros/Makefile.sub
+#   main.ps: [list of dependencies]
 # EOF
 
 
 GROFF ?= groff
 GOPTS ?= -wmac -e -t -R -U -ms -ma -Mmacros -Kutf8
 
-DOCUMENT ?= $(wildcard *.ms)
+PS2PDF ?= ps2pdf
 
-PS ?= $(patsubst %.ms, %.ps, $(DOCUMENT))
+DOCUMENT ?= $(patsubst %.ms, %.ps, $(wildcard *.ms))
 
 .PHONY: all clean
+.PRECIOUS: %.ps
 
-all: $(PS)
+all: $(DOCUMENT)
 
 clean:
-	$(RM) *.ps *.ll
+	$(RM) $(DOCUMENT) $(patsubst %.pdf, %.ps, $(DOCUMENT)) *.ll
 
 %.ps: %.ms
 	$(GROFF) $(GOPTS) $< > $@
 	$(GROFF) $(GOPTS) $< > $@
+
+%.pdf: %.ps
+	$(PS2PDF) $< $@
