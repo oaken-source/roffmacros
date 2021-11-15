@@ -1,0 +1,76 @@
+
+.\" *** NHX macro *******************************************************
+.\"  (N)umbered (H)eader E(x)tended.
+.\"
+.\"  this macro is a combination of the functionality of the NH and
+.\"  XS/XA/XE macros, to automatically add TOC entries for each new
+.\"  section header.
+.\"
+.\"  Additonally, a separate TOC file is generated, to allow placement
+.\"  of the TOC at the beginning of the file through the use of the
+.\"  TOCX macro.
+.\"
+.de NHX
+.ds nhx-num \\$1
+.shift
+.NH \\*[nhx-num]
+\\$*
+.XS
+\h'\\*[nhx-num]-1'\\*[SN-DOT] \\$*
+.XE
+.if !d toc*fil \{\
+.       TOCX-init
+.\}
+.ie !d toc*first \{\
+.       write toc*fd .XS \\n[%]
+.       ds toc*first 1
+.\}
+.el \{\
+.       write toc*fd .XA \\n[%]
+\}
+.write toc*fd \h'\\*[nhx-num]-1'\\*[SN-DOT] \\$*
+.rm nhx-num
+..
+
+.\" *** TOCX-init macro *************************************************
+.\"  this is a helper macro to initialize and source the TOC file where
+.\"  ever it is first needed.
+.\"
+.de TOCX-init
+.ds toc*fil \\n[.F]
+.substring toc*fil 0 -4
+.as toc*fil .toc
+.sy touch \\*[toc*fil]
+.so \\*[toc*fil]
+.open toc*fd \\*[toc*fil]
+..
+
+.\" *** TOCX-fini macro *************************************************
+.\"  this is a helper macro that closes the TOC entries in the generated
+.\"  file at the end of the document.
+.\"
+.de TOCX-fini
+.if !d toc*fil \{\
+.       TOCX-init
+.\}
+.write toc*fd .XE
+.close toc*fd
+..
+.em TOCX-fini
+
+.\" *** TOCX macro ******************************************************
+.\"  (T)able (o)f (C)ontents E(x)tended.
+.\"
+.\"  this macro produces a table of contents, similar to .TC -- but it
+.\"  adds a check to initialize the TOC entries from the file, and
+.\"  silences a warning if that file does not exist.
+.\"
+.de TOCX
+.if !d toc*fil \{\
+.       TOCX-init
+.\}
+.if !d toc*div \{\
+.       ds toc*div
+.\}
+.TC
+..

@@ -10,7 +10,7 @@
 
 
 GROFF ?= groff
-GOPTS ?= -wmac -e -t -R -U -ms -ma -Mmacros -Kutf8
+GOPTS ?= -ww -wmac -b -e -t -R -U -ms -ma -Mmacros -Kutf8 -Tps
 
 SOELIM ?= soelim
 PS2PDF ?= ps2pdf
@@ -23,9 +23,9 @@ DOCUMENT ?= $(patsubst %.ms, %.ps, $(wildcard *.ms))
 all: $(DOCUMENT)
 
 clean:
-	$(RM) $(DOCUMENT) $(patsubst %.pdf, %.ps, $(DOCUMENT)) *.ll
+	$(RM) $(DOCUMENT) $(patsubst %.pdf, %.ps, $(DOCUMENT)) *.ll *.toc
 
-%.ps: %.ms
+%.ps: %.ms $(wildcard macros/*.tmac) $(wildcard macros/src/*.tmac)
 	$(SOELIM) $< | $(GROFF) $(GOPTS) > $@
 	$(SOELIM) $< | $(GROFF) $(GOPTS) > $@
 
