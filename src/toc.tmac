@@ -50,11 +50,10 @@
 .\"  file at the end of the document.
 .\"
 .de TOCX-fini
-.if !d toc*fil \{\
-.       TOCX-init
+.if d toc*fil \{\
+.       write toc*fd .XE
+.       close toc*fd
 .\}
-.write toc*fd .XE
-.close toc*fd
 ..
 .em TOCX-fini
 
