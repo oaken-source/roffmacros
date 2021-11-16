@@ -73,3 +73,38 @@
 .\}
 .TC
 ..
+
+.\" *** TOCI macro ******************************************************
+.\"  (T)able (o)f (C)ontents (I)nlined..
+.\"
+.\"  this macro produces a table of contents, similar to .PX -- but it
+.\"  adds a check to initialize the TOC entries from the file, and
+.\"  silences a warning if that file does not exist. It also does not
+.\"  force 1C mode.
+.\"
+.de TOCI
+.if !d toc*fil \{\
+.       TOCX-init
+.\}
+.if !d toc*div \{\
+.       ds toc*div
+.\}
+.if !'\\$1'no' \{\
+.	ce 1
+.	ie (\\n[PS] >= 1000) \
+.		ps ((\\n[PS]z / 1000u) + 2z)
+.	el \
+.		ps \\n[PS]+2
+.	ft B
+\\*[TOC]
+.	ft
+.	ps
+.\}
+.nf
+.char \[toc*leader-char] .\h'1m'
+.lc \[toc*leader-char]
+.ta (u;\\n[.l]-\\n[.i]-\w'000') (u;\\n[.l]-\\n[.i])R
+.sp 2
+.toc*div
+.par@reset
+..
